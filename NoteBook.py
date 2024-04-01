@@ -34,7 +34,6 @@ class NoteBook:
 
     def find_note(self, find_by, data):
         if os.path.isfile("NoteBook.csv"):
-            print(123)
             self.list_notes = FileManager.read()
         else:
             return None
