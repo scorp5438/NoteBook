@@ -24,7 +24,7 @@ class NoteBook:
         print(f"Заметка {note} добавлена")
 
     def show_notes(self):
-        if os.path.isfile("test.csv"):
+        if os.path.isfile("NoteBook.csv"):
             self.list_notes = FileManager().read()
             for note in self.list_notes:
                 # print(note)
@@ -33,8 +33,11 @@ class NoteBook:
             print("Файл не найден")
 
     def find_note(self, find_by, data):
-        if not os.path.isfile("test.csv"):
+        if os.path.isfile("NoteBook.csv"):
+            print(123)
             self.list_notes = FileManager.read()
+        else:
+            return None
         for note in self.list_notes:
             if note[find_by].startswith(data):
                 self.find_list.append(note)
@@ -42,7 +45,7 @@ class NoteBook:
 
     def edit_note(self, changes, title):
         dT = datetime.datetime.now().strftime("%d-%m-%Y %H:%M:%S")
-        if not os.path.isfile("test.csv"):
+        if not os.path.isfile("NoteBook.csv"):
             self.list_notes = FileManager().read()
         changes_list = self.find_note(1, title)
         changes_note = None
@@ -110,11 +113,13 @@ class NoteBook:
             find_setting = input("По какому параметру искать?\n1 По заголовку\n2 По дате\n")
             if find_setting == "1":
                 title = input("Введите искомый заголовок:\n")
-                self.find_note(1, title)
+                res = self.find_note(1, title)
             if find_setting == "2":
                 data = input("Введите дату заметки в формате dd-mm-yyyy:\n")
-                self.find_note(3, data)
-            if not self.find_list:
+                res = self.find_note(3, data)
+            elif res == None:
+                print("Файл не найден")
+            elif not self.find_list:
                 print("Значение не найдено")
             elif find_setting not in "12":
                 print("Введена некорректная команда")
