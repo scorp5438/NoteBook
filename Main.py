@@ -2,7 +2,7 @@ from NoteBook import NoteBook
 
 if __name__ == "__main__":
     isWork = True
-    while(isWork):
+    while isWork:
         noteBook = NoteBook()
         noteBook.menu()
         work = input("Продолжить? y/n:\n")

@@ -5,7 +5,6 @@ import datetime
 
 
 class NoteBook:
-
     find_list = []
 
     @staticmethod
@@ -16,9 +15,10 @@ class NoteBook:
         return slist_notes
 
     list_notes = check_file()
+
     def create_note(self, title, text):
-        id = len(self.list_notes)
-        note = Note(id, title, text)
+        id_note = len(self.list_notes)
+        note = Note(id_note, title, text)
         self.list_notes.append([i for i in (str(note)).split(';')])
         FileManager().write(self.list_notes)
         print(f"Заметка {note} добавлена")
@@ -43,7 +43,7 @@ class NoteBook:
         return self.find_list
 
     def edit_note(self, changes, title):
-        dT = datetime.datetime.now().strftime("%d-%m-%Y %H:%M:%S")
+        d_t = datetime.datetime.now().strftime("%d-%m-%Y %H:%M:%S")
         if not os.path.isfile("NoteBook.csv"):
             self.list_notes = FileManager().read()
         changes_list = self.find_note(1, title)
@@ -55,9 +55,9 @@ class NoteBook:
         if len(changes_list) > 1:
             print(self.list_notes[0])
             print(*changes_list, sep="\n")
-            id = input("Найдено несколько заметок, введите id заметки, которую необходимо изменить:\n")
+            id_note = input("Найдено несколько заметок, введите id заметки, которую необходимо изменить:\n")
             for note in changes_list:
-                if note[0] == id:
+                if note[0] == id_note:
                     changes_note = note
             if changes_note is None:
                 print("id не найден...")
@@ -66,14 +66,14 @@ class NoteBook:
                     new_data = input(f"Введите новый {data}\n")
                     print(f"Заметка: {self.list_notes[index]} изменена, {data} заменен, на {new_data}")
                     self.list_notes[index][int(changes)] = new_data
-                    self.list_notes[index][3] = dT
+                    self.list_notes[index][3] = d_t
 
         elif len(changes_list) == 1:
             new_data = input(f"Введите новый {data}\n")
             change_index = self.list_notes.index(changes_list[0])
             print(f"Заметка: {self.list_notes[change_index]} изменена, {data} заменен, на {new_data}")
             self.list_notes[change_index][int(changes)] = new_data
-            self.list_notes[change_index][3] = dT
+            self.list_notes[change_index][3] = d_t
         FileManager.write(self.list_notes)
         changes_list.clear()
 
@@ -83,9 +83,9 @@ class NoteBook:
         if len(delete_list) > 1:
             print(self.list_notes[0])
             print(*delete_list, sep="\n")
-            id = input("Найдено несколько заметок, введите id заметки, которую необходимо удалить:\n")
-            for note in  delete_list:
-                if note[0] == id:
+            id_note = input("Найдено несколько заметок, введите id заметки, которую необходимо удалить:\n")
+            for note in delete_list:
+                if note[0] == id_note:
                     delete_note = note
             if delete_note is None:
                 print("id не найден")
@@ -101,7 +101,9 @@ class NoteBook:
         delete_list.clear()
 
     def menu(self):
-        action = input("Выберите действие:\n1 Создать заметку\n2 Показать список заметок\n3 Найти заметку\n4 Изменить заметку\n5 Удалить заметку\n")
+        action = input(
+            "Выберите действие:\n1 Создать заметку\n2 Показать список заметок\n3 Найти заметку\n4 Изменить заметку\n5 "
+            "Удалить заметку\n")
         if action == "1":
             title = input("Введите заголовок заметки:\n")
             text = input("Введите текст заметки:\n")
@@ -109,6 +111,7 @@ class NoteBook:
         if action == "2":
             self.show_notes()
         if action == "3":
+            res = []
             find_setting = input("По какому параметру искать?\n1 По заголовку\n2 По дате\n")
             if find_setting == "1":
                 title = input("Введите искомый заголовок:\n")
@@ -116,13 +119,11 @@ class NoteBook:
             if find_setting == "2":
                 data = input("Введите дату заметки в формате dd-mm-yyyy:\n")
                 res = self.find_note(3, data)
-            elif res == None:
-                print("Файл не найден")
             elif not self.find_list:
-                print("Значение не найдено")
+                print("Файла нет или значение не найдено.")
             elif find_setting not in "12":
                 print("Введена некорректная команда")
-            print(*self.find_list, sep="\n")
+            print(*res, sep="\n")
         self.find_list.clear()
         if action == "4":
             title = input("Введите заголовок заметки, которую необходимо изменить:\n")
