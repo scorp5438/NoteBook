@@ -17,7 +17,7 @@ class NoteBook:
     list_notes = check_file()
 
     def create_note(self, title, text):
-        id_note = len(self.list_notes)
+        id_note = int(self.list_notes[-1][0])+1
         note = Note(id_note, title, text)
         self.list_notes.append([i for i in (str(note)).split(';')])
         FileManager().write(self.list_notes)
@@ -74,6 +74,8 @@ class NoteBook:
             print(f"Заметка: {self.list_notes[change_index]} изменена, {data} заменен, на {new_data}")
             self.list_notes[change_index][int(changes)] = new_data
             self.list_notes[change_index][3] = d_t
+        else:
+            print(f"Заметка с заголовком {title} не найдена")
         FileManager.write(self.list_notes)
         changes_list.clear()
 
@@ -97,6 +99,8 @@ class NoteBook:
         elif len(delete_list) == 1:
             self.list_notes.remove(delete_list[0])
             print(f"Заметка: {delete_list[0]} удалена")
+        else:
+            print(f"Заметка с заголовком {title} не найдена")
         FileManager.write(self.list_notes)
         delete_list.clear()
 
